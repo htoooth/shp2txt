@@ -156,8 +156,6 @@ namespace shp2wkt
                     province.Shape = Poly2Str(polygon.Parts);
                     province.ID = db.Id(1);
 
-                    Console.WriteLine(province.Shape);
-
                     db.Insert<Province>("Province", province);
                 }
             }
