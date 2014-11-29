@@ -38,12 +38,15 @@ namespace shp2wkt
             public string Country;
             public string Province;
             public bool IsTreasure;
+            public string CountryChineseName;
+            public string ProvinceChineseName;
         }
         public class Country
         {
             public long ID;
             public string Name;
             public string Shape;
+            public string ChineseName;
         }
         public class Province
         {
@@ -51,6 +54,7 @@ namespace shp2wkt
             public string Name;
             public string Country;
             public string Shape;
+            public string ChineseName;
         }
 
         public struct Point
@@ -153,6 +157,7 @@ namespace shp2wkt
                     Province province = new Province();
                     province.Name = shape.GetMetadata("name");
                     province.Country = shape.GetMetadata("country");
+                    province.ChineseName = shape.GetMetadata("chinesename");
                     province.Shape = Poly2Str(polygon.Parts);
                     province.ID = db.Id(1);
 
@@ -172,6 +177,7 @@ namespace shp2wkt
                     var country = new Country();
                     country.Name = shape.GetMetadata("COUNTRY");
                     country.Shape = Poly2Str(polygon.Parts);
+                    country.ChineseName = shape.GetMetadata("chinesename");
                     country.ID = db.Id(1);
 
                     db.Insert<Country>("Country",country);
@@ -195,6 +201,8 @@ namespace shp2wkt
                         Longitude = int.Parse(token[1]),
                         Province = token[2],
                         Country = token[3],
+                        CountryChineseName = token[4],
+                        ProvinceChineseName = token[5],
                         IsTreasure = false
                     });
                 }
