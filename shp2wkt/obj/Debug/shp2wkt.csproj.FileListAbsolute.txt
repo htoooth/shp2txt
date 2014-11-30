@@ -3,4 +3,3 @@ D:\projects\c shape\shp2wkt\shp2wkt\bin\Debug\shp2wkt.exe
 D:\projects\c shape\shp2wkt\shp2wkt\bin\Debug\shp2wkt.pdb
 D:\projects\c shape\shp2wkt\shp2wkt\obj\Debug\shp2wkt.exe
 D:\projects\c shape\shp2wkt\shp2wkt\obj\Debug\shp2wkt.pdb
-D:\projects\c shape\shp2wkt\shp2wkt\obj\Debug\shp2wkt.csprojResolveAssemblyReference.cache

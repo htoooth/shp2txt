@@ -38,15 +38,15 @@ namespace shp2wkt
             public string Country;
             public string Province;
             public bool IsTreasure;
-            public string CountryChineseName;
-            public string ProvinceChineseName;
+            //public string CountryChineseName;
+            //public string ProvinceChineseName;
         }
         public class Country
         {
             public long ID;
             public string Name;
             public string Shape;
-            public string ChineseName;
+            //public string ChineseName;
         }
         public class Province
         {
@@ -82,6 +82,16 @@ namespace shp2wkt
             server.GetConfig().EnsureTable<Item>("Item", "ID");
 
             db = server.Open();
+
+            //using (var box = db.Cube())
+            //{
+            //    foreach(var it in box.Select<Province>("from Province where 1==1")){
+            //        box.Bind("Province", it.ID).Delete();
+            //    }
+
+            //    box.Commit();
+
+            //}
         }
 
         static void Main(string[] args)
@@ -89,7 +99,7 @@ namespace shp2wkt
             InitDB();
 
             // province
-            string provincePath = @"d:\projects\data\Export_Output.shp";
+            string provincePath = @"d:\projects\data\world big patch\World_Province_BigPart.shp";
             ImportProvinceLayer(provincePath);
 
             // country
@@ -101,15 +111,15 @@ namespace shp2wkt
             ImportItemLayer(itemPath);
 
             //Test(); 
-            //var result =db.Select<Province>("from Province where Country==?", "China");
-            //int length = result.Count();
-            
+            var result = db.Select<Province>("from Province where Country==?", "China");
+            int length = result.Count();
 
-            //Console.WriteLine(length);
-           
+
+            Console.WriteLine(length);
+
             //foreach (var p in result)
             //{
-            //    Console.WriteLine("{0},{1},{2}", p.Name, p.Country, p.Shape);
+            //    Console.WriteLine("{0},{1},{2}", p.Name, p.Country,p.ChineseName, p.Shape);
             //}
             
         }
@@ -157,7 +167,7 @@ namespace shp2wkt
                     Province province = new Province();
                     province.Name = shape.GetMetadata("name");
                     province.Country = shape.GetMetadata("country");
-                    province.ChineseName = shape.GetMetadata("chinesename");
+                    province.ChineseName = shape.GetMetadata("cname");
                     province.Shape = Poly2Str(polygon.Parts);
                     province.ID = db.Id(1);
 
@@ -177,7 +187,7 @@ namespace shp2wkt
                     var country = new Country();
                     country.Name = shape.GetMetadata("COUNTRY");
                     country.Shape = Poly2Str(polygon.Parts);
-                    country.ChineseName = shape.GetMetadata("chinesename");
+                    //country.ChineseName = shape.GetMetadata("cname");
                     country.ID = db.Id(1);
 
                     db.Insert<Country>("Country",country);
@@ -201,8 +211,8 @@ namespace shp2wkt
                         Longitude = int.Parse(token[1]),
                         Province = token[2],
                         Country = token[3],
-                        CountryChineseName = token[4],
-                        ProvinceChineseName = token[5],
+                        //CountryChineseName = token[4],
+                        //ProvinceChineseName = token[5],
                         IsTreasure = false
                     });
                 }
