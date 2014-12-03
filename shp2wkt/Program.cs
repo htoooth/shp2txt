@@ -35,11 +35,11 @@ namespace shp2wkt
             public long ID;
             public int Latitude;
             public int Longitude;
-            public string Country;
+            public string Name;
             public string Province;
-            public bool IsTreasure;
-            //public string CountryChineseName;
-            //public string ProvinceChineseName;
+            public string ProvinceChineseName;
+            public string Country;
+            public string CountryChineseName;
         }
         public class Country
         {
@@ -54,7 +54,6 @@ namespace shp2wkt
             public string Name;
             public string Country;
             public string Shape;
-            public string ChineseName;
         }
 
         public struct Point
@@ -78,7 +77,7 @@ namespace shp2wkt
             DB.Root(path);
             server = new DB(1);
             server.GetConfig().EnsureTable<Province>("Province", "ID");
-            server.GetConfig().EnsureTable<Country>("Country", "ID");
+            //server.GetConfig().EnsureTable<Country>("Country", "ID");
             server.GetConfig().EnsureTable<Item>("Item", "ID");
 
             db = server.Open();
@@ -99,15 +98,15 @@ namespace shp2wkt
             InitDB();
 
             // province
-            string provincePath = @"d:\projects\data\world big patch\World_Province_BigPart.shp";
+            string provincePath = @"d:\projects\data\new\World_Province_BigPart.shp";
             ImportProvinceLayer(provincePath);
 
             // country
-            string countryPath = @"d:\projects\data\New folder\World.shp";
-            ImportCountryLayer(countryPath);
+            //string countryPath = @"d:\projects\data\New folder\World.shp";
+            //ImportCountryLayer(countryPath);
 
             // item
-            string itemPath = @"d:\projects\data\longlang.csv";
+            string itemPath = @"d:\projects\data\new\LanLong.csv";
             ImportItemLayer(itemPath);
 
             //Test(); 
@@ -167,7 +166,6 @@ namespace shp2wkt
                     Province province = new Province();
                     province.Name = shape.GetMetadata("name");
                     province.Country = shape.GetMetadata("country");
-                    province.ChineseName = shape.GetMetadata("cname");
                     province.Shape = Poly2Str(polygon.Parts);
                     province.ID = db.Id(1);
 
@@ -209,11 +207,11 @@ namespace shp2wkt
                         ID = db.Id(1),
                         Latitude = int.Parse(token[0]),
                         Longitude = int.Parse(token[1]),
-                        Province = token[2],
-                        Country = token[3],
-                        //CountryChineseName = token[4],
-                        //ProvinceChineseName = token[5],
-                        IsTreasure = false
+                        Name = token[2],
+                        Province = token[3],
+                        ProvinceChineseName = token[4],
+                        Country = token[5],
+                        CountryChineseName = token[6],
                     });
                 }
             }
