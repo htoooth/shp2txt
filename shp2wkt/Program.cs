@@ -98,7 +98,7 @@ namespace shp2wkt
             InitDB();
 
             // province
-            string provincePath = @"d:\projects\data\new\World_Province_BigPart.shp";
+            string provincePath = @"d:\projects\data\new4\World_Province_BigPart.shp";
             ImportProvinceLayer(provincePath);
 
             // country
@@ -106,15 +106,21 @@ namespace shp2wkt
             //ImportCountryLayer(countryPath);
 
             // item
-            string itemPath = @"d:\projects\data\new\LanLong.csv";
-            ImportItemLayer(itemPath);
+            string itempath = @"d:\projects\data\new\lanlongu.csv";
+            ImportItemLayer(itempath);
 
             //Test(); 
-            var result = db.Select<Province>("from Province where Country==?", "China");
-            int length = result.Count();
+            //var result = db.Select<Item>("from Item where Name==?", "China");
+
+            //foreach(var i in result)
+            //{
+            //    Console.WriteLine(i.CountryChineseName);
+            //}
+
+            //int length = result.Count();
 
 
-            Console.WriteLine(length);
+            //Console.WriteLine(length);
 
             //foreach (var p in result)
             //{
@@ -169,6 +175,16 @@ namespace shp2wkt
                     province.Shape = Poly2Str(polygon.Parts);
                     province.ID = db.Id(1);
 
+                    long len = 0;
+
+                    foreach (var i in polygon.Parts)
+                    {
+                        len = len + i.Length;
+                    }
+
+                    Assert.Test(len < 65535,()=> province.Country + len);
+
+
                     db.Insert<Province>("Province", province);
                 }
             }
@@ -185,6 +201,8 @@ namespace shp2wkt
                     var country = new Country();
                     country.Name = shape.GetMetadata("COUNTRY");
                     country.Shape = Poly2Str(polygon.Parts);
+
+                   
                     //country.ChineseName = shape.GetMetadata("cname");
                     country.ID = db.Id(1);
 
@@ -202,6 +220,11 @@ namespace shp2wkt
                     var line = file.ReadLine();
                     if (line == null) break;
                     var token = line.Split(',');
+
+                    //byte[] s = Encoding.UTF8.GetBytes(token[4]);
+                    //string y = Encoding.GetEncoding("GB2312").GetString(s);
+                    //Console.WriteLine(token[4]);
+
                     db.Insert("Item", new Item
                     {
                         ID = db.Id(1),
